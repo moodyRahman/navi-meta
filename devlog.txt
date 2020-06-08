@@ -4,3 +4,7 @@ moududurR -- June 4th 8:58:23 EST
 ivanG -- June 8th 10:28:00 PM EST
     Update gitignore
     Add requirements.txt
+
+ivanG -- June 8th 12:02:00 PM EST
+    Fix import errors
+    Update requirements

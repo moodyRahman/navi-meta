@@ -1,7 +1,8 @@
-from utils import dbctl
+from ..utils import dbctl
 from re import match
 
 name_form = '\w{3,20}'
+
 
 def login(name, password):
     '''
@@ -12,11 +13,12 @@ def login(name, password):
     Otherwise returns `False`.
     '''
 
-    user = dbctl.find(dbctl.users, {'name':name})
+    user = dbctl.find(dbctl.users, {'name': name})
     if not user or user[0]['password'] != password:
         return False
     else:
         return user[0]
+
 
 def create(name, password, mode='user'):
     '''
@@ -26,13 +28,13 @@ def create(name, password, mode='user'):
     '''
 
     if match(name_form, name):
-        dupes = dbctl.find(dbctl.users, {'name':name})
+        dupes = dbctl.find(dbctl.users, {'name': name})
         if dupes:
             raise ValueError('Username already exists')
         uid = dbctl.store(
-            dbctl.users, 
-            {'name':name, 'password':password, 'mode':mode}
+            dbctl.users,
+            {'name': name, 'password': password, 'mode': mode}
         )
     else:
-        raise ValueError('Username must be from 3 to 20 characters long, consisting only of alphanumeric characters and underscores')
-
+        raise ValueError(
+            'Username must be from 3 to 20 characters long, consisting only of alphanumeric characters and underscores')

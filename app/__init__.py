@@ -1,6 +1,7 @@
 from flask import *
 from os import urandom
-from utils import usrctl, forms
+from .utils import usrctl, forms
+
 # from pymongo import ObjectID
 app = Flask(__name__)
 app.secret_key = urandom(32)
@@ -14,6 +15,7 @@ def index():
         return render_template('home.html')
     else:
         return redirect('/login')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -29,10 +31,12 @@ def login():
             flash('Invalid username or password')
     return render_template('login.html', form=form)
 
-@app.route('/logout', methods=['GET','POST'])
+
+@app.route('/logout', methods=['GET', 'POST'])
 def logout():
     del session['user']
     return redirect('/login')
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -47,7 +51,6 @@ def register():
         except ValueError as ex:
             flash(ex)
     return render_template('register.html', form=form)
-
 
 
 application = app
