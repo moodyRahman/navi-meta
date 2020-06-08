@@ -1,7 +1,7 @@
 from flask import *
 from os import urandom
 from .utils import usrctl, forms
-
+from functools import wraps
 # from pymongo import ObjectID
 app = Flask(__name__)
 app.secret_key = urandom(32)
@@ -10,26 +10,27 @@ app.secret_key = urandom(32)
 
 def force_logout(route):
     '''Removes `\'user\'` from session cookie'''
+    @wraps(route)
     def wrapper(*args, **kwargs):
         session.pop('user', None)
         return route(*args, **kwargs)
 
-    wrapper.__name__ = route.__name__
     return wrapper
 
 def login_required(route):
     '''Checks for presence of `\'user\'` in session cookie. If nonexistant, redirects to login page'''
+    @wraps(route)
     def wrapper(*args, **kwargs):
         if 'user' in session:
             return route(*args, **kwargs)
         else:
             return redirect(url_for('login'))
 
-    wrapper.__name__ = route.__name__
     return wrapper
 
 def admin_required(route):
     '''Checks user mode. If not admin, returns home'''
+    @wraps(route)
     def wrapper(*args, **kwargs):
         if session['user']['mode'] == 'admin':
             return route(*args, **kwargs)
@@ -37,7 +38,6 @@ def admin_required(route):
             flash('Administrative privileges required')
             return redirect(url_for('index'))
 
-    wrapper.__name__ = route.__name__
     return wrapper
         
 # Routes
