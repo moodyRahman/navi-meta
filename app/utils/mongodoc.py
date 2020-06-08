@@ -21,12 +21,16 @@ class Essay(mgng.EmbeddedDocument):
     ispublic = mgng.BooleanField()
 
 
+class College(mgng.EmbeddedDocument):
+    name = mgng.StringField()
+    status = mgng.StringField()
+    rank = mgng.IntField()
+    essays = mgng.ListField(mgng.EmbeddedDocumentField(Essay))
 
 
-class Essay(mongoengine.Document):
-    timestamp = mongoengine.DateTimeField()
-    body = mongoengine.StringField()
-    ispublic = mongoengine.BooleanField()
+class User(mgng.Document):
+    """Defines what a user consists of
+    Timestamp, body, and ispublic
 
 
 class User(mongoengine.Document):
