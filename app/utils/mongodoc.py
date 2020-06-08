@@ -35,14 +35,13 @@ class User(mgng.Document):
 	Args:
 	    mgng ([type]): [description]
 	"""
-    username = mgng.StringField(required=True)
-    name = mgng.StringField()
+    name = mgng.StringField(required=True)
     password = mgng.StringField(required=True)
     colleges = mgng.SortedListField(mgng.EmbeddedDocumentField(College), ordering="rank")
     accounttype = mgng.StringField(required=True)
 
 
-class AllCollege():
+class AllCollege(mgng.Document):
     name = mgng.StringField()
     questions = mgng.DictField()      # {question : max word count}
     preferredmeta = mgng.DictField()  # {field:value}
