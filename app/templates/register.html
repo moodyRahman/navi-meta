@@ -15,7 +15,6 @@
 {% endif %}
 
 <form action="/register", method="POST">
-    {{ form.hidden_tag }}
     <div>
         {{ form.name.label }} <br> {{ form.name(size=20) }}
     </div>
