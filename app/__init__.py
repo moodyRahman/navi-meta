@@ -61,7 +61,7 @@ def login():
     if form.validate_on_submit():
         user = usrctl.login(request.form['name'], request.form['password'])
         if user:
-            session['user'] = {'name': user['name'], 'mode':user['mode']}
+            session['user'] = {'name': user['name'], 'accounttype':user['accounttype']}
             return redirect(url_for('index'))
         else:
             flash('Invalid username or password')
