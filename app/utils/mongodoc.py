@@ -32,10 +32,20 @@ class User(mgng.Document):
     """Defines what a user consists of
     Timestamp, body, and ispublic
 
+	Args:
+	    mgng ([type]): [description]
+	"""
+    username = mgng.StringField(required=True)
+    name = mgng.StringField()
+    password = mgng.StringField(required=True)
+    colleges = mgng.SortedListField(mgng.EmbeddedDocumentField(College), ordering="rank")
+    accounttype = mgng.StringField(required=True)
 
-class User(mongoengine.Document):
-    title = mongoengine.StringField()
-    user = mongoengine.StringField()
-    password = mongoengine.StringField()
-    essays = mongoengine.ListField(Essay)
 
+class AllCollege():
+    name = mgng.StringField()
+    questions = mgng.DictField()      # {question : max word count}
+    preferredmeta = mgng.DictField()  # {field:value}
+    preferredwordfrequency = mgng.DictField
+    accepted = mgng.IntField
+    rejected = mgng.IntField
