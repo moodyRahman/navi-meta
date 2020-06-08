@@ -1,53 +1,88 @@
 from flask import *
 from os import urandom
-from .utils import usrctl, forms, mongodoc
+from .utils import usrctl, forms
 
 # from pymongo import ObjectID
 app = Flask(__name__)
 app.secret_key = urandom(32)
-WTF_CSRF_ENABLED = False
-WTF_CSRF_CHECK_DEFAULT = False
 
+# Decorators
+
+def force_logout(route):
+    '''Removes `\'user\'` from session cookie'''
+    def wrapper(*args, **kwargs):
+        session.pop('user', None)
+        return route(*args, **kwargs)
+
+    wrapper.__name__ = route.__name__
+    return wrapper
+
+def login_required(route):
+    '''Checks for presence of `\'user\'` in session cookie. If nonexistant, redirects to login page'''
+    def wrapper(*args, **kwargs):
+        if 'user' in session:
+            return route(*args, **kwargs)
+        else:
+            return redirect(url_for('login'))
+
+    wrapper.__name__ = route.__name__
+    return wrapper
+
+def admin_required(route):
+    '''Checks user mode. If not admin, returns home'''
+    def wrapper(*args, **kwargs):
+        if session['user']['mode'] == 'admin':
+            return route(*args, **kwargs)
+        else:
+            flash('Administrative privileges required')
+            return redirect(url_for('index'))
+
+    wrapper.__name__ = route.__name__
+    return wrapper
+        
+# Routes
 
 @app.route('/', methods=['GET'])
+@login_required
 def index():
-    if 'user' in session:
-        return render_template('home.html')
-    else:
-        return redirect('/login')
+    return render_template('home.html')
 
+@app.route('/admin', methods=['GET'])
+@admin_required
+@login_required
+def admin():
+    flash('admin mode')
+    return render_template('home.html')
 
 @app.route('/login', methods=['GET', 'POST'])
+@force_logout
 def login():
     form = forms.LoginForm()
-    if 'user' in session:
-        return redirect('/')
     if form.validate_on_submit():
         user = usrctl.login(request.form['name'], request.form['password'])
         if user:
-            session['user'] = user['name']
-            return redirect('/')
+            session['user'] = {'name': user['name'], 'mode':user['mode']}
+            return redirect(url_for('index'))
         else:
             flash('Invalid username or password')
     return render_template('login.html', form=form)
 
 
 @app.route('/logout', methods=['GET', 'POST'])
+@force_logout
 def logout():
-    del session['user']
-    return redirect('/login')
+    return redirect(url_for('login'))
 
 
 @app.route('/register', methods=['GET', 'POST'])
+@force_logout
 def register():
-    if 'user' in session:
-        return redirect('/')
     form = forms.RegisterForm()
     if form.validate_on_submit():
         try:
             usrctl.create(request.form['name'], request.form['password'])
             print('SYSTEM: Created user ' + request.form['name'])
-            return redirect('/login')
+            return redirect(url_for('login'))
         except ValueError as ex:
             flash(ex)
     return render_template('register.html', form=form)
