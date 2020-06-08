@@ -1,2 +1,6 @@
 moududurR -- June 4th 8:58:23 EST
-Team designed the inital feature list and site mockups. 
+    Team designed the inital feature list and site mockups.
+
+ivanG -- June 8th 10:28:00 PM EST
+    Update gitignore
+    Add requirements.txt
