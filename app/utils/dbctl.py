@@ -8,9 +8,8 @@ _client = MongoClient(
     authSource='sitedata'
 )
 # _client = MongoClient('localhost', 27017)
-accounts = _client.sitedata.accounts # basic account information
-userdata = _client.sitedata.userdata # user's essays, colleges, etc.
-colleges = _client.sitedata.colleges # college information
+users = _client.sitedata.users
+colleges = _client.sitedata.colleges
 
 def store(collection, contents):
     return collection.insert(contents)
