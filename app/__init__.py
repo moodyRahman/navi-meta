@@ -4,7 +4,8 @@ from .utils import usrctl, forms
 
 # from pymongo import ObjectID
 app = Flask(__name__)
-app.secret_key = urandom(32)
+debug = True
+app.secret_key = urandom(32) if not debug else 'not a secret key'
 WTF_CSRF_ENABLED = False
 WTF_CSRF_CHECK_DEFAULT = False
 
@@ -55,4 +56,4 @@ def register():
 
 application = app
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=debug)
