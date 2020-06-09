@@ -1,30 +1,39 @@
 {% extends "_base.html" %}
 {% block title %} registration {% endblock title %}
+{% from "macros/render_field.html" import form_field %}
 {% block head %} {% endblock head %}
 {% block body %}
-{% if form.errors %}
-    <ul class="errors">
-        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
-            {% for error in field_errors %}
-                <li>{{ form[field_name].label }}: {{ error }}</li>
-            {% endfor %}
-        {% endfor %}
-    </ul>
-{% endif %}
-<h1>Register</h1>
-<form action="/register", method="POST">
-    <div>
-        {{ form.name.label }} <br> {{ form.name(size=20) }}
+    <div class="card">
+        <div class="card-body">
+
+            <h1 class="card-title">Register</h1>
+
+            {% if form.errors %}
+                <ul class="errors">
+                    {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                        {% for error in field_errors %}
+                            <li>{{ form[field_name].label }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <form action="{{ url_for('register') }}" method="POST">
+                {{ form_field(form.name) }}
+                {{ form_field(form.password) }}
+                {{ form_field(form.confirm) }}
+                <br>
+                <center>
+                    <input type="submit" value="Log In" class="btn btn-primary">
+                </center>
+            </form>
+        </div>
+
+        <center>
+            <a href="{{ url_for('login') }}">Log in here!</a>
+            <br><br><br>
+        </center>
+
     </div>
-    <br>
-    <div>
-        {{ form.password.label }} <br> {{ form.password(size=20) }}
-    </div>
-    <br>
-    <div>
-        {{ form.confirm.label }} <br> {{ form.confirm(size=20) }}
-    </div>
-    <input type="submit" value="submit">
-</form>
-<a href="/login">Login</a>
+
 {% endblock body %}

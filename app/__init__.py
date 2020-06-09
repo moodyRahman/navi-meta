@@ -32,6 +32,7 @@ def login_required(route):
         if 'user' in session:
             return route(*args, **kwargs)
         else:
+            flash('Please log in to see this page!', 'danger')
             return redirect(url_for('login'))
 
     return wrapper
@@ -45,7 +46,7 @@ def admin_required(route):
         if session['user']['mode'] == 'admin':
             return route(*args, **kwargs)
         else:
-            flash('Administrative privileges required')
+            flash('Administrative privileges required', 'danger')
             return redirect(url_for('index'))
 
     return wrapper
@@ -63,7 +64,7 @@ def index():
 @admin_required
 @login_required
 def admin():
-    flash('admin mode')
+    flash('admin mode', 'info')
     return render_template('home.html')
 
 
@@ -75,9 +76,10 @@ def login():
         user = usrctl.login(request.form['name'], request.form['password'])
         if user:
             session['user'] = {'name': user['name'], 'accounttype': user['accounttype']}
+            flash('Logged in successfully!', 'success')
             return redirect(url_for('index'))
         else:
-            flash('Invalid username or password')
+            flash('Invalid username or password', 'danger')
     return render_template('login.html', form=form)
 
 
@@ -95,9 +97,10 @@ def register():
         try:
             usrctl.create(request.form['name'], request.form['password'])
             print('SYSTEM: Created user ' + request.form['name'])
+            flash('Account created', 'success')
             return redirect(url_for('login'))
         except ValueError as ex:
-            flash(ex)
+            flash(ex, 'danger')
     return render_template('register.html', form=form)
 
 

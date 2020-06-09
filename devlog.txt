@@ -8,3 +8,7 @@ ivanG -- June 8th 10:28:00 PM EST
 ivanG -- June 8th 12:02:00 PM EST
     Fix import errors
     Update requirements
+
+ivanG -- June 9th 1:25:00 AM EST
+    Major UI upgrades with bootstrap
+    Add relevant flashes to login/signup logic
