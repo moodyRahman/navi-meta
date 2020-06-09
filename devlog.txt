@@ -1,6 +1,9 @@
 moududurR -- June 4th 8:58:23 EST
     Team designed the inital feature list and site mockups.
 
+yevgeniyG -- June 8th 12:00 EST
+    Login system working
+
 ivanG -- June 8th 10:28:00 PM EST
     Update gitignore
     Add requirements.txt
@@ -12,3 +15,8 @@ ivanG -- June 8th 12:02:00 PM EST
 ivanG -- June 9th 1:25:00 AM EST
     Major UI upgrades with bootstrap
     Add relevant flashes to login/signup logic
+
+yevgeniyG -- June 9th 08:40 EST
+    Repealed and replaced pymongo dbctl with mongoengine
+    Added comments
+    Corrected typos in login, register pages

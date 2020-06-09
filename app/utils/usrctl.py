@@ -1,6 +1,5 @@
-from ..utils import dbctl
 from re import match
-from ..utils import mongodoc
+from ..utils import dbctl
 
 name_form = '\w{3,20}'
 
@@ -14,9 +13,7 @@ def login(name, password):
     Otherwise returns `False`.
     '''
 
-    # user = dbctl.find(dbctl.users, {'name': name})
-    # print(type())
-    user=mongodoc.User.objects(name=name)
+    user = dbctl.User.objects(name=name)
     if not user or user[0]['password'] != password:
         return False
     else:
@@ -31,16 +28,10 @@ def create(name, password, mode='user'):
     '''
 
     if match(name_form, name):
-        # dupes = dbctl.find(dbctl.users, {'name': name})
-        dupes = mongodoc.User.objects(name=name)
+        dupes = dbctl.User.objects(name=name)
         if dupes:
             raise ValueError('Username already exists')
-        # uid = dbctl.store(
-        #     dbctl.users,
-        #     {'name': name, 'password': password, 'mode': mode}
-        # )
-        newuser = mongodoc.User(name=name, password=password, accounttype=mode)
+        newuser = dbctl.User(name=name, password=password, accounttype=mode)
         newuser.save()
     else:
-        raise ValueError(
-            'Username must be from 3 to 20 characters long, consisting only of alphanumeric characters and underscores')
+        raise ValueError('Username must be 3 to 20 alphnumeric characters or underscores')

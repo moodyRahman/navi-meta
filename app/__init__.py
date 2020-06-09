@@ -1,14 +1,11 @@
 from flask import *
 from os import urandom
-from .utils import usrctl, forms, mongodoc
+from .utils import usrctl, forms
 from functools import wraps
 
-# from pymongo import ObjectID
 app = Flask(__name__)
 debug = True
 app.secret_key = urandom(32) if not debug else 'not a secret key'
-WTF_CSRF_ENABLED = False
-WTF_CSRF_CHECK_DEFAULT = False
 
 
 # Decorators
@@ -32,7 +29,6 @@ def login_required(route):
         if 'user' in session:
             return route(*args, **kwargs)
         else:
-            flash('Please log in to see this page!', 'danger')
             return redirect(url_for('login'))
 
     return wrapper
@@ -46,7 +42,7 @@ def admin_required(route):
         if session['user']['mode'] == 'admin':
             return route(*args, **kwargs)
         else:
-            flash('Administrative privileges required', 'danger')
+            flash(f'Administrative privileges required to view \"{url_for(route.__name__)}\"', 'danger')
             return redirect(url_for('index'))
 
     return wrapper
@@ -74,12 +70,16 @@ def login():
     form = forms.LoginForm()
     if form.validate_on_submit():
         user = usrctl.login(request.form['name'], request.form['password'])
-        if user:
-            session['user'] = {'name': user['name'], 'accounttype': user['accounttype']}
+        if user: # login() returns user dict
+            session['user'] = { # store vital user info
+                'name': user['name'], 
+                'accounttype': user['accounttype']
+            }
             flash('Logged in successfully!', 'success')
             return redirect(url_for('index'))
         else:
-            flash('Invalid username or password', 'danger')
+            flash('Incorrect username or password', 'danger')
+    
     return render_template('login.html', form=form)
 
 
@@ -96,11 +96,12 @@ def register():
     if form.validate_on_submit():
         try:
             usrctl.create(request.form['name'], request.form['password'])
-            print('SYSTEM: Created user ' + request.form['name'])
+            print('SYSTEM: Created user ' + request.form['name']) # log user creation
             flash('Account created', 'success')
             return redirect(url_for('login'))
         except ValueError as ex:
             flash(ex, 'danger')
+        
     return render_template('register.html', form=form)
 
 
