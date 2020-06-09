@@ -6,9 +6,9 @@
 supplementary essay metadata for college applications
 
 #### The Team
-Moody Rahman- Project Manager/ Mongo Backend
-Ivan Galakhov- Frontend and UI
-Yevgeniy Gorbachev- Middware and Flask
+Moody Rahman- Project Manager/ Mongo Backend  
+Ivan Galakhov- Frontend and UI  
+Yevgeniy Gorbachev- Middware and Flask  
 
 #### API's Used
 TBA
