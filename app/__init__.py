@@ -1,6 +1,6 @@
 from flask import *
 from os import urandom
-from .utils import usrctl, forms
+from .utils import usrctl, forms, dbctl
 from functools import wraps
 
 app = Flask(__name__)
@@ -104,6 +104,15 @@ def register():
         
     return render_template('register.html', form=form)
 
+@app.route("/myessay")
+def getessays():
+    # dbctl.User.objects(name=session["user"])
+    return render_template("myessay.html")
+
+@app.route("/mycolleges")
+def mycolleges():
+
+    return render_template("mycolleges.html")
 
 application = app
 if __name__ == '__main__':
