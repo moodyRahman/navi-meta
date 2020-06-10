@@ -20,7 +20,7 @@ def login(name, password):
         return user[0]
 
 
-def create(name, password, mode='user'):
+def create_user(name, password, mode='user'):
     '''
     Attempts to create a user with given username and password. 
 
@@ -29,9 +29,28 @@ def create(name, password, mode='user'):
 
     if match(name_form, name):
         dupes = dbctl.User.objects(name=name)
-        if dupes:
-            raise ValueError('Username already exists')
+        if len(dupes):
+            raise ValueError(f'Username "{name}" already exists')
         newuser = dbctl.User(name=name, password=password, accounttype=mode)
         newuser.save()
     else:
         raise ValueError('Username must be 3 to 20 alphnumeric characters or underscores')
+
+def add_college_to_user(username, college_name):
+    '''
+    Adds college object to user
+
+    Uses user and college names
+    '''
+    
+    user = dbctl.find_user(username)
+    if not user:
+        raise ValueError(f'User "{username}" does not exist')
+
+    college = dbctl.find_user(college_name)
+    if not college:
+        raise ValueError(f'College "{college_name}" does not exist')
+
+    college = dbctl.from_allcollege(college)
+
+    # code to update user's Colleges list
