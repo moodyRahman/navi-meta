@@ -20,3 +20,7 @@ yevgeniyG -- June 9th 08:40 EST
     Repealed and replaced pymongo dbctl with mongoengine
     Added comments
     Corrected typos in login, register pages
+
+yevgeniyG -- June 10th 16:30 EST
+    Added helper functions and docstrings to dbctl and usrctl
+    Added skeleton for /colleges route
