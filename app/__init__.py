@@ -11,7 +11,7 @@ app.secret_key = urandom(32) if not debug else 'not a secret key'
 # Decorators
 
 def force_logout(route):
-    '''Removes `\'user\'` from session cookie'''
+    '''Removes 'user' from session cookie'''
 
     @wraps(route)
     def wrapper(*args, **kwargs):
@@ -22,7 +22,7 @@ def force_logout(route):
 
 
 def login_required(route):
-    '''Checks for presence of `\'user\'` in session cookie. If nonexistant, redirects to login page'''
+    '''Checks for presence of 'user' in session cookie. If nonexistant, redirects to login page'''
 
     @wraps(route)
     def wrapper(*args, **kwargs):
@@ -43,7 +43,7 @@ def admin_required(route):
         if session['user']['accounttype'] == 'admin':
             return route(*args, **kwargs)
         else:
-            flash(f'Administrative privileges required to view \"{url_for(route.__name__)}\"', 'danger')
+            flash(f'Administrative privileges required to view "{url_for(route.__name__)}"', 'danger')
             return redirect(url_for('index'))
 
     return wrapper
