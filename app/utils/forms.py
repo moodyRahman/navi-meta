@@ -17,5 +17,13 @@ class RegisterForm(FlaskForm):
 
     name = StringField('name', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
-    confirm = PasswordField('confirm',
-                            validators=[DataRequired(), EqualTo('password', message='Passwords do not match')])
+    confirm = PasswordField(
+        'confirm',
+        validators=[
+            DataRequired(), 
+            EqualTo('password', message='Passwords do not match')
+        ]
+    )
+
+# WIP
+# Form to add college to user's list?    

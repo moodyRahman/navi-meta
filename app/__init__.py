@@ -55,15 +55,6 @@ def admin_required(route):
 def index():
     return render_template('home.html')
 
-
-@app.route('/admin', methods=['GET'])
-@admin_required
-@login_required
-def admin():
-    flash('admin mode', 'info')
-    return render_template('home.html')
-
-
 @app.route('/login', methods=['GET', 'POST'])
 @force_logout
 def login():
@@ -95,7 +86,7 @@ def register():
     form = forms.RegisterForm()
     if form.validate_on_submit():
         try:
-            usrctl.create(request.form['name'], request.form['password'])
+            usrctl.create_user(request.form['name'], request.form['password'])
             print('SYSTEM: Created user ' + request.form['name']) # log user creation
             flash('Account created', 'success')
             return redirect(url_for('login'))
@@ -113,6 +104,32 @@ def getessays():
 def mycolleges():
 
     return render_template("mycolleges.html")
+
+@app.route('/colleges/<college>', methods=['GET', 'POST'])
+@login_required
+def colleges(college): # INCOMPLETE
+    # a POST request should add a college to the user's list.
+    # implemented by FlaskForm?
+
+    # if GET request
+    if college == 'list': # special value for list of all colleges
+        return render_template('colleges.html', colleges = dbctl.AllCollege.objects())
+    else:
+        College = dbctl.find_college(college)
+        if College: # college found, render
+            return render_template('college.html', college=College)
+        else: # college not found
+            flash(f'College "{college}" does not exist', 'danger')
+            return redirect(url_for('colleges', college = 'list'))
+
+# @app.route('/create_college', methods=['GET', 'POST'])
+# @admin_required
+# @login_required
+# def create_college():
+
+# @app.route('/add_college')
+
+
 
 application = app
 if __name__ == '__main__':
