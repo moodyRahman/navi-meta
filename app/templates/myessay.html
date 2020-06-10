@@ -1,0 +1,15 @@
+{% extends "_base.html" %}
+{% block title %} homepage {% endblock title %}
+{% block head %} {% endblock head %}
+{% block body %}
+all of my essays <br>
+// Render an array of Essay objects <br>
+// intially keep them in a collapsed list, click to expand <br>
+&nbsp; collapsed form: timestamp--college--question--beginning few words of the essay <br>
+// click on element to make it expand and show the full essay <br>
+&nbsp; give them each an edit button <br>
+&nbsp;&nbsp; edit button turns the static essay on the expanded list element into a text area <br>
+&nbsp;&nbsp; edit button then turns into a submit button, forwards the textarea data + timestamp to the route <br>
+&nbsp; leave space for the essay metadata <br>
+// Hitting the edit button turns the essay display
+{% endblock body %}
