@@ -39,7 +39,8 @@ def admin_required(route):
 
     @wraps(route)
     def wrapper(*args, **kwargs):
-        if session['user']['mode'] == 'admin':
+        print(session)
+        if session['user']['accounttype'] == 'admin':
             return route(*args, **kwargs)
         else:
             flash(f'Administrative privileges required to view \"{url_for(route.__name__)}\"', 'danger')
@@ -95,6 +96,15 @@ def register():
         
     return render_template('register.html', form=form)
 
+@app.route("/myessay")
+def getessays():
+    # dbctl.User.objects(name=session["user"])
+    return render_template("myessay.html")
+
+@app.route("/mycolleges")
+def mycolleges():
+
+    return render_template("mycolleges.html")
 
 @app.route('/colleges/<college>', methods=['GET', 'POST'])
 @login_required
