@@ -39,7 +39,8 @@ def admin_required(route):
 
     @wraps(route)
     def wrapper(*args, **kwargs):
-        if session['user']['mode'] == 'admin':
+        print(session)
+        if session['user']['accounttype'] == 'admin':
             return route(*args, **kwargs)
         else:
             flash(f'Administrative privileges required to view \"{url_for(route.__name__)}\"', 'danger')
@@ -63,6 +64,7 @@ def admin():
     flash('admin mode', 'info')
     return render_template('home.html')
 
+# @app.route("")
 
 @app.route('/login', methods=['GET', 'POST'])
 @force_logout
