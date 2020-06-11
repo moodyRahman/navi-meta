@@ -39,7 +39,7 @@ def admin_required(route):
 
     @wraps(route)
     def wrapper(*args, **kwargs):
-        print(session)
+        # print(session)
         if session['user']['accounttype'] == 'admin':
             return route(*args, **kwargs)
         else:
@@ -63,6 +63,24 @@ def index():
 def admin():
     flash('admin mode', 'info')
     return render_template('home.html')
+
+@app.route("/admindash", methods=["POST", "GET"])
+@admin_required
+def admindash():
+    if request.method == "POST":
+        # print(request.form)
+        # print(request.form.to_dict(flat=False))
+        form = request.form.to_dict(flat=False)
+        print(form)
+        dictsout={}
+        for n, x in enumerate(form["suppq[]"]):
+            dictsout[x] = form["wc[]"][n]
+        dbctl.AllCollege(name=form["collegename"][0], questions=dictsout).save()
+        return "x"
+    if request.method == "GET":
+        return render_template("admindash.html")
+        
+
 
 # @app.route("")
 
